@@ -69,7 +69,62 @@ app.post("/api/uusi-koira", function(request, response) {
           } else {
             console.log("DATA INSERTED");
             db.end();
-            response.status(201).send({ message: "Data inserted!" });
+            response.status(201).send({ message: "Koira lisätty!" });
+          }
+        }
+      );
+    }
+  });
+});
+
+app.get("/api/omat-pentueet", function(request, response) {
+  pool.connect(function(err, db, done) {
+    if (err) {
+      return response.status(400).send(err);
+    } else {
+      db.query("SELECT * FROM omat_pentueet", function(err, table) {
+        done();
+        if (err) {
+          return response.status(400).send(err);
+        } else {
+          return response.status(200).send(table.rows);
+        }
+      });
+    }
+  });
+});
+
+app.post("/api/uusi-pentue", function(request, response) {
+  var syntymaaika = request.body.syntymaaika;
+  var pentueen_nimi = request.body.pentueen_nimi;
+  var emon_nimi = request.body.emon_nimi;
+  var isan_nimi = request.body.isan_nimi;
+  var lisatiedot = request.body.lisatiedot;
+  var litter_id = request.body.litter_id;
+  let values = [
+    syntymaaika,
+    pentueen_nimi,
+    emon_nimi,
+    isan_nimi,
+    lisatiedot,
+    litter_id
+  ];
+
+  pool.connect((err, db, done) => {
+    if (err) {
+      return response.status(400).send(err);
+    } else {
+      db.query(
+        "INSERT INTO omat_pentueet (syntymaaika, pentueen_nimi, emon_nim, isan_nimi, lisatiedot, litter_id) VALUES($1, $2, $3, $4, $5, $6)",
+        [...values],
+        (err, table) => {
+          done();
+          if (err) {
+            return response.status(400).send(err);
+          } else {
+            console.log("DATA INSERTED");
+            db.end();
+            response.status(201).send({ message: "Pentue lisätty!" });
           }
         }
       );
