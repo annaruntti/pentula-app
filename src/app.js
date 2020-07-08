@@ -1,18 +1,12 @@
-const express = require("express");
-const app = express();
-const pg = require("pg");
-const bodyParser = require("body-parser");
-const morgan = require("morgan");
-const PORT = 8000;
+import express from "express";
+import bodyParser from "body-parser";
+import morgan from "morgan";
+import Knex from "knex";
+import dbConfig from "./database/config.js";
 
-let pool = new pg.Pool({
-  user: "mypuppies",
-  database: "mypuppies",
-  password: "mypuppies",
-  host: "localhost",
-  port: 5432,
-  max: 10,
-});
+const app = express();
+const PORT = 8000;
+const db = Knex(dbConfig);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
