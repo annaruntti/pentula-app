@@ -1,0 +1,30 @@
+{
+  "name": "my-puppies-api",
+  "version": "1.0.0",
+  "description": "REST API for Pentula",
+  "main": "app.js",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "morgan": "^1.9.1",
+    "pg": "^7.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "scripts": {
+    "start": "NODE_ENV=production node app.js",
+    "start:dev": "NODE_ENV=development nodemon --nolazy app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/annaruntti/pentula-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/annaruntti/pentula-api/issues"
+  },
+  "homepage": "https://github.com/annaruntti/pentula-api#readme"
+}

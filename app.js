@@ -6,12 +6,12 @@ const morgan = require("morgan");
 const PORT = 8000;
 
 let pool = new pg.Pool({
-  user: "anna.runtti",
-  database: "pentudata",
-  password: "pentuappi",
+  user: "mypuppies",
+  database: "mypuppies",
+  password: "mypuppies",
   host: "localhost",
   port: 5432,
-  max: 10
+  max: 10,
 });
 
 app.use(bodyParser.json());
@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(morgan("dev"));
 
-app.use(function(request, response, next) {
+app.use(function (request, response, next) {
   response.header("Access-Control-Allow-Origin", "*");
   response.header(
     "Access-Control-Allow-Headers",
@@ -28,12 +28,14 @@ app.use(function(request, response, next) {
   next();
 });
 
-app.get("/api/omat-koirat", function(request, response) {
-  pool.connect(function(err, db, done) {
+app.get("/", (req, res) => res.send("asdfsaf"));
+
+app.get("/api/omat-koirat", function (request, response) {
+  pool.connect(function (err, db, done) {
     if (err) {
       return response.status(400).send(err);
     } else {
-      db.query("SELECT * FROM omat_koirat", function(err, table) {
+      db.query("SELECT * FROM omat_koirat", function (err, table) {
         done();
         if (err) {
           return response.status(400).send(err);
@@ -45,7 +47,7 @@ app.get("/api/omat-koirat", function(request, response) {
   });
 });
 
-app.post("/api/uusi-koira", function(request, response) {
+app.post("/api/uusi-koira", function (request, response) {
   var virallinen_nimi = request.body.virallinen_nimi;
   var kutsumanimi = request.body.kutsumanimi;
   var syntymaaika = request.body.syntymaaika;
@@ -77,12 +79,12 @@ app.post("/api/uusi-koira", function(request, response) {
   });
 });
 
-app.get("/api/omat-pentueet", function(request, response) {
-  pool.connect(function(err, db, done) {
+app.get("/api/omat-pentueet", function (request, response) {
+  pool.connect(function (err, db, done) {
     if (err) {
       return response.status(400).send(err);
     } else {
-      db.query("SELECT * FROM omat_pentueet", function(err, table) {
+      db.query("SELECT * FROM omat_pentueet", function (err, table) {
         done();
         if (err) {
           return response.status(400).send(err);
@@ -94,7 +96,7 @@ app.get("/api/omat-pentueet", function(request, response) {
   });
 });
 
-app.post("/api/uusi-pentue", function(request, response) {
+app.post("/api/uusi-pentue", function (request, response) {
   var syntymaaika = request.body.syntymaaika;
   var pentueen_nimi = request.body.pentueen_nimi;
   var emon_nimi = request.body.emon_nimi;
@@ -107,7 +109,7 @@ app.post("/api/uusi-pentue", function(request, response) {
     emon_nimi,
     isan_nimi,
     lisatiedot,
-    litter_id
+    litter_id,
   ];
 
   pool.connect((err, db, done) => {
