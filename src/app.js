@@ -1,12 +1,12 @@
-import express from "express";
-import bodyParser from "body-parser";
-import morgan from "morgan";
-import Knex from "knex";
-import dbConfig from "./database/config.js";
+const express = require("express");
+const bodyParser = require("body-parser");
+const morgan = require("morgan");
+const Knex = require("knex");
+const dbConfig = require("./database/knexfile.js");
 
 const app = express();
 const PORT = 8000;
-const db = Knex(dbConfig);
+const db = Knex(dbConfig[process.env.NODE_ENV]);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -22,7 +22,14 @@ app.use(function (request, response, next) {
   next();
 });
 
-app.get("/", (req, res) => res.send("asdfsaf"));
+app.get("/", async (req, res) => {
+  await db("test").insert({ foobar: 234 });
+
+  // const a = await db("test").select("foobar").from("test");
+  // console.log(a);
+
+  res.send("asdfsaf");
+});
 
 app.get("/api/omat-koirat", function (request, response) {
   pool.connect(function (err, db, done) {
