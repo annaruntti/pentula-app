@@ -49,23 +49,23 @@ app.get("/api/omat-koirat", function (request, response) {
 });
 
 app.post("/api/uusi-koira", function (request, response) {
+  var dog_id = request.body.dog_id;
+  var user_id = request.body.user_id;
   var official_name = request.body.official_name;
   var name = request.body.name;
   var bdate = request.body.bdate;
   var rnumber = request.body.rnumber;
   var breed = request.body.breed;
   var sex = request.body.sex;
-  var dog_id = request.body.dog_id;
-  var user_id = request.body.user_id;
   let values = [
+    dog_id,
+    user_id,
     official_name,
     name,
     bdate,
     rnumber,
     breed,
     sex,
-    dog_id,
-    user_id,
   ];
 
   pool.connect((err, db, done) => {
@@ -142,6 +142,39 @@ app.post("/api/uusi-pentue", function (request, response) {
             console.log("DATA INSERTED");
             db.end();
             response.status(201).send({ message: "Pentue lisätty!" });
+          }
+        }
+      );
+    }
+  });
+});
+
+app.post("/api/uusi-pentue/pennun-tiedot", function (request, response) {
+  var litter_id = request.body.litter_id;
+  var btime = request.body.btime;
+  var name = request.body.name;
+  var bweight = request.body.bweight;
+  var sex = request.body.sex;
+  var description = request.body.description;
+  var puppy_id = request.body.puppy_id;
+
+  let values = [litter_id, puppy_id, btime, name, bweight, sex, description];
+
+  pool.connect((err, db, done) => {
+    if (err) {
+      return response.status(400).send(err);
+    } else {
+      db.query(
+        "INSERT INTO puppies (litter_id, puppy_id, btime, name, bweight, sex, description) VALUES($1, $2, $3, $4, $5, $6, $7)",
+        [...values],
+        (err, table) => {
+          done();
+          if (err) {
+            return response.status(400).send(err);
+          } else {
+            console.log("DATA INSERTED");
+            db.end();
+            response.status(201).send({ message: "Pentu lisätty!" });
           }
         }
       );

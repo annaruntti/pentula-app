@@ -6,7 +6,7 @@ Clone project for front-end from https://github.com/annaruntti/pentula.git, UI s
 
 API starts with command: "docker-compose up" it's listening port 8000. You need PostgreSQL database. From /api/omat-koirat you can found dog's from database with get method and add new dogs with post method.
 
-There is two tables in database with names "omat_koirat" and "omat_pentueet".
+There is three tables in database with names "own_dogs" and "own_litters" and "puppies".
 
 To create a migration, run
 `npm run migrate:make MIGRATION_NAME`
