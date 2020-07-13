@@ -36,7 +36,7 @@ app.get("/api/omat-koirat", function (request, response) {
     if (err) {
       return response.status(400).send(err);
     } else {
-      db.query("SELECT * FROM omat_koirat", function (err, table) {
+      db.query("SELECT * FROM own_dogs", function (err, table) {
         done();
         if (err) {
           return response.status(400).send(err);
@@ -49,21 +49,31 @@ app.get("/api/omat-koirat", function (request, response) {
 });
 
 app.post("/api/uusi-koira", function (request, response) {
-  var virallinen_nimi = request.body.virallinen_nimi;
-  var kutsumanimi = request.body.kutsumanimi;
-  var syntymaaika = request.body.syntymaaika;
-  var sukupuoli = request.body.sukupuoli;
-  //   var id = Math.random().toFixed(2);
+  var official_name = request.body.official_name;
+  var name = request.body.name;
+  var bdate = request.body.bdate;
+  var rnumber = request.body.rnumber;
+  var breed = request.body.breed;
+  var sex = request.body.sex;
+  var dog_id = request.body.dog_id;
   var user_id = request.body.user_id;
-  // var name = new Date().getUTCMilliseconds();
-  let values = [virallinen_nimi, kutsumanimi, syntymaaika, sukupuoli, user_id];
+  let values = [
+    official_name,
+    name,
+    bdate,
+    rnumber,
+    breed,
+    sex,
+    dog_id,
+    user_id,
+  ];
 
   pool.connect((err, db, done) => {
     if (err) {
       return response.status(400).send(err);
     } else {
       db.query(
-        "INSERT INTO omat_koirat (virallinen_nimi, kutsumanimi, syntymaaika, sukupuoli, user_id) VALUES($1, $2, $3, $4, $5)",
+        "INSERT INTO own_dogs (official_name, name, bdate, rnumber, breed, sex, dog_id, user_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8)",
         [...values],
         (err, table) => {
           done();
@@ -85,7 +95,7 @@ app.get("/api/omat-pentueet", function (request, response) {
     if (err) {
       return response.status(400).send(err);
     } else {
-      db.query("SELECT * FROM omat_pentueet", function (err, table) {
+      db.query("SELECT * FROM own_litters", function (err, table) {
         done();
         if (err) {
           return response.status(400).send(err);
@@ -98,19 +108,23 @@ app.get("/api/omat-pentueet", function (request, response) {
 });
 
 app.post("/api/uusi-pentue", function (request, response) {
-  var syntymaaika = request.body.syntymaaika;
-  var pentueen_nimi = request.body.pentueen_nimi;
-  var emon_nimi = request.body.emon_nimi;
-  var isan_nimi = request.body.isan_nimi;
-  var lisatiedot = request.body.lisatiedot;
+  var bdate = request.body.bdate;
+  var litter_name = request.body.litter_name;
+  var breed = request.body.breed;
+  var mon_name = request.body.mon_name;
+  var dad_name = request.body.dad_name;
+  var additional_info = request.body.additional_info;
   var litter_id = request.body.litter_id;
+  var user_id = request.body.user_id;
   let values = [
-    syntymaaika,
-    pentueen_nimi,
-    emon_nimi,
-    isan_nimi,
-    lisatiedot,
+    bdate,
+    litter_name,
+    breed,
+    mon_name,
+    dad_name,
+    additional_info,
     litter_id,
+    user_id,
   ];
 
   pool.connect((err, db, done) => {
@@ -118,7 +132,7 @@ app.post("/api/uusi-pentue", function (request, response) {
       return response.status(400).send(err);
     } else {
       db.query(
-        "INSERT INTO omat_pentueet (syntymaaika, pentueen_nimi, emon_nim, isan_nimi, lisatiedot, litter_id) VALUES($1, $2, $3, $4, $5, $6)",
+        "INSERT INTO own_litters (bdate, litter_name, breed, mom_name, dad_name, additional_info, litter_id, user_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8)",
         [...values],
         (err, table) => {
           done();
