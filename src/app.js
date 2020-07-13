@@ -22,30 +22,18 @@ app.use(function (request, response, next) {
   next();
 });
 
-app.get("/", async (req, res) => {
-  await db("test").insert({ foobar: 234 });
+app.get("/api/omat-koirat", async (request, response) => {
+  let error = undefined;
 
-  // const a = await db("test").select("foobar").from("test");
-  // console.log(a);
+  const res = await db("own_dogs")
+    .where("dog_id", 1)
+    .catch((err) => (error = err));
 
-  res.send("asdfsaf");
-});
+  if (error) {
+    return response.status(500).send(error);
+  }
 
-app.get("/api/omat-koirat", function (request, response) {
-  pool.connect(function (err, db, done) {
-    if (err) {
-      return response.status(400).send(err);
-    } else {
-      db.query("SELECT * FROM own_dogs", function (err, table) {
-        done();
-        if (err) {
-          return response.status(400).send(err);
-        } else {
-          return response.status(200).send(table.rows);
-        }
-      });
-    }
-  });
+  response.send(res);
 });
 
 app.post("/api/uusi-koira", function (request, response) {
