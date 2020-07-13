@@ -117,13 +117,13 @@ app.post("/api/uusi-pentue", function (request, response) {
   var litter_id = request.body.litter_id;
   var user_id = request.body.user_id;
   let values = [
+    litter_id,
     bdate,
     litter_name,
     breed,
     mon_name,
     dad_name,
     additional_info,
-    litter_id,
     user_id,
   ];
 
@@ -151,12 +151,12 @@ app.post("/api/uusi-pentue", function (request, response) {
 
 app.post("/api/uusi-pentue/pennun-tiedot", function (request, response) {
   var litter_id = request.body.litter_id;
+  var puppy_id = request.body.puppy_id;
   var btime = request.body.btime;
   var name = request.body.name;
   var bweight = request.body.bweight;
   var sex = request.body.sex;
   var description = request.body.description;
-  var puppy_id = request.body.puppy_id;
 
   let values = [litter_id, puppy_id, btime, name, bweight, sex, description];
 
