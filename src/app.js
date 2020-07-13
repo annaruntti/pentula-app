@@ -149,7 +149,7 @@ app.post("/api/uusi-pentue", function (request, response) {
   });
 });
 
-app.post("/api/uusi-pentue/pennun-tiedot", function (request, response) {
+app.post("/api/uusi-pentue/pennut", function (request, response) {
   var litter_id = request.body.litter_id;
   var btime = request.body.btime;
   var name = request.body.name;
