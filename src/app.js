@@ -25,9 +25,7 @@ app.use(function (request, response, next) {
 app.get("/api/omat-koirat", async (request, response) => {
   let error = undefined;
 
-  const res = await db("own_dogs")
-    .where("dog_id", 1)
-    .catch((err) => (error = err));
+  const res = await db("own_dogs").catch((err) => (error = err));
 
   if (error) {
     return response.status(500).send(error);
