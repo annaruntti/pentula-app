@@ -36,47 +36,65 @@ app.get("/api/omat-koirat", async (request, response) => {
   response.send(res);
 });
 
-app.post("/api/uusi-koira", function (request, response) {
-  var dog_id = request.body.dog_id;
-  var user_id = request.body.user_id;
-  var official_name = request.body.official_name;
-  var name = request.body.name;
-  var bdate = request.body.bdate;
-  var rnumber = request.body.rnumber;
-  var breed = request.body.breed;
-  var sex = request.body.sex;
-  let values = [
-    dog_id,
-    user_id,
-    official_name,
-    name,
-    bdate,
-    rnumber,
-    breed,
-    sex,
-  ];
+app.post("/api/uusi-koira", async (request, response) => {
+  let error = undefined;
 
-  pool.connect((err, db, done) => {
-    if (err) {
-      return response.status(400).send(err);
-    } else {
-      db.query(
-        "INSERT INTO own_dogs (official_name, name, bdate, rnumber, breed, sex, dog_id, user_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8)",
-        [...values],
-        (err, table) => {
-          done();
-          if (err) {
-            return response.status(400).send(err);
-          } else {
-            console.log("DATA INSERTED");
-            db.end();
-            response.status(201).send({ message: "Koira lisätty!" });
-          }
-        }
-      );
-    }
-  });
+  await db("own_dogs")
+    .insert({
+      dog_id: request.body.dog_id,
+      user_id: request.body.user_id,
+      official_name: request.body.official_name,
+      name: request.body.name,
+      bdate: request.body.bdate,
+      rnumber: request.body.rnumber,
+      breed: request.body.breed,
+      sex: request.body.sex,
+      active: request.body.active,
+    })
+    .catch((err) => (error = err));
 });
+
+// app.post("/api/uusi-koira", function (request, response) {
+//   var dog_id = request.body.dog_id;
+//   var user_id = request.body.user_id;
+//   var official_name = request.body.official_name;
+//   var name = request.body.name;
+//   var bdate = request.body.bdate;
+//   var rnumber = request.body.rnumber;
+//   var breed = request.body.breed;
+//   var sex = request.body.sex;
+//   let values = [
+//     dog_id,
+//     user_id,
+//     official_name,
+//     name,
+//     bdate,
+//     rnumber,
+//     breed,
+//     sex,
+//   ];
+
+//   pool.connect((err, db, done) => {
+//     if (err) {
+//       return response.status(400).send(err);
+//     } else {
+//       db.query(
+//         "INSERT INTO own_dogs (official_name, name, bdate, rnumber, breed, sex, dog_id, user_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8)",
+//         [...values],
+//         (err, table) => {
+//           done();
+//           if (err) {
+//             return response.status(400).send(err);
+//           } else {
+//             console.log("DATA INSERTED");
+//             db.end();
+//             response.status(201).send({ message: "Koira lisätty!" });
+//           }
+//         }
+//       );
+//     }
+//   });
+// });
 
 app.get("/api/omat-pentueet", function (request, response) {
   pool.connect(function (err, db, done) {
